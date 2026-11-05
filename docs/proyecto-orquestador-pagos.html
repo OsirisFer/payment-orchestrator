@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orquestador de Pagos — Proyecto de Portfolio</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #171a24;
+    --border: #2a2e3d;
+    --text: #e4e6eb;
+    --muted: #9aa0ae;
+    --accent: #5b8cff;
+    --green: #2ecc71;
+    --red: #ff6b6b;
+    --yellow: #f5c15a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 0 0 80px 0;
+  }
+  header {
+    padding: 56px 24px 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse at top, #1a2036 0%, var(--bg) 70%);
+  }
+  header h1 {
+    font-size: 2.1rem;
+    margin: 0 0 10px;
+  }
+  header p.subtitle {
+    color: var(--muted);
+    max-width: 680px;
+    margin: 0 auto;
+    font-size: 1.05rem;
+  }
+  .badges {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .badge {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  section {
+    margin-top: 56px;
+  }
+  h2 {
+    font-size: 1.5rem;
+    border-left: 4px solid var(--accent);
+    padding-left: 14px;
+    margin-bottom: 8px;
+  }
+  h3 {
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin-top: 28px;
+  }
+  .lead {
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 700px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  .scope-in { border-left: 4px solid var(--green); }
+  .scope-out { border-left: 4px solid var(--red); }
+  .scope-in h3, .scope-out h3 { margin-top: 0; }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 6px; }
+
+  /* Architecture diagram */
+  .arch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin: 24px 0;
+  }
+  .box {
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    padding: 16px 18px;
+    width: 210px;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+  .box strong { display: block; margin-bottom: 6px; font-size: 0.95rem; }
+  .box span { color: var(--muted); font-size: 0.8rem; }
+  .arrow {
+    align-self: center;
+    color: var(--muted);
+    font-size: 1.4rem;
+  }
+  .store {
+    border-style: dashed;
+    border-color: var(--yellow);
+  }
+
+  /* Tech table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 8px;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.92rem;
+    vertical-align: top;
+  }
+  th {
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .status {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .yes { background: rgba(46,204,113,0.15); color: var(--green); }
+  .no  { background: rgba(255,107,107,0.15); color: var(--red); }
+  .partial { background: rgba(245,193,90,0.15); color: var(--yellow); }
+  .reason { color: var(--muted); font-size: 0.85rem; }
+
+  .category-title {
+    margin-top: 36px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: var(--text);
+    font-weight: 700;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+
+  .phase {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .phase-num {
+    background: var(--accent);
+    color: #0b0d13;
+    font-weight: 700;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .phase-content strong { display: block; margin-bottom: 4px; }
+  .phase-content span { color: var(--muted); font-size: 0.9rem; }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    margin-top: 70px;
+    font-size: 0.85rem;
+  }
+
+  code {
+    background: #0b0d13;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: #9fd0ff;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Orquestador de Pagos (no-custodial)</h1>
+  <p class="subtitle">Proyecto de portfolio enfocado en los problemas reales de una fintech de pagos LatAm — ruteo de pagos, idempotencia, reconciliación y pagos iniciados por agentes de IA — con doble objetivo: mostrar skills de backend serio y, si funciona, convertirse en negocio real.</p>
+  <div class="badges">
+    <span class="badge">Java + Spring Boot</span>
+    <span class="badge">Microservicios</span>
+    <span class="badge">No-custodial</span>
+    <span class="badge">MCP / Agentes IA</span>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <h2>Qué es y para qué sirve</h2>
+    <p class="lead">
+      Un sistema que recibe una solicitud de pago, decide a qué proveedor mandarla (tarjeta vía Stripe/Mercado Pago, o cripto vía USDT), garantiza que nunca se cobre dos veces, reconcilia lo que registró contra lo que el proveedor dice que pasó, y expone esa capacidad tanto a humanos (API REST normal) como a agentes de IA (vía servidor MCP) — esto último inspirado en los protocolos abiertos de pagos iniciados por agentes que ya están apareciendo en la industria.
+    </p>
+  </section>
+
+  <section>
+    <h2>Arquitectura</h2>
+    <p class="lead">Monolito modular al inicio, con 3 límites de servicio reales (no arbitrarios) separados por necesidad de consistencia/disponibilidad distinta, no por moda.</p>
+    <div class="arch">
+      <div class="box"><strong>webhook-listener</strong><span>Recibe notificaciones de Stripe/MercadoPago/cadena. Siempre disponible, responde rápido.</span></div>
+      <div class="arrow">→</div>
+      <div class="box store"><strong>Cola (RabbitMQ/SQS)</strong><span>Mensajería async entre servicios</span></div>
+      <div class="arrow">→</div>
+      <div class="box"><strong>payment-core</strong><span>Ledger, máquina de estados, idempotencia. Consistencia fuerte (Postgres).</span></div>
+    </div>
+    <div class="arch">
+      <div class="box"><strong>reconciliation-worker</strong><span>Job programado: compara ledger vs. lo que reporta cada proveedor</span></div>
+      <div class="box"><strong>mcp-agent-gateway</strong><span>Expone "crear pago" / "consultar estado" como herramientas para un agente de IA</span></div>
+      <div class="box store"><strong>DynamoDB local</strong><span>Log de eventos de webhook + cache de idempotency keys</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Alcance</h2>
+    <div class="grid-2">
+      <div class="card scope-in">
+        <h3>✅ Incluido</h3>
+        <ul>
+          <li>Integración real con sandbox de Stripe y Mercado Pago (API de test, plata falsa)</li>
+          <li>Checkout USDT no-custodial: verificación de pago en blockchain pública (la plata va directo a la wallet del comercio)</li>
+          <li>Idempotencia, reintentos, manejo de estados de transacción</li>
+          <li>Reconciliación automática (job programado)</li>
+          <li>Pagos recurrentes/programados (inspirado en sistemas tipo Pix Automático)</li>
+          <li>Servidor MCP para que un agente de IA inicie/consulte pagos</li>
+          <li>Dashboard de observabilidad (error rate, latencia, tasa de aprobación)</li>
+          <li>Tests unitarios + integración (Testcontainers) + colección Postman</li>
+          <li>CI/CD con GitHub Actions, Docker, despliegue a ambiente de staging</li>
+        </ul>
+      </div>
+      <div class="card scope-out">
+        <h3>❌ Fuera de alcance</h3>
+        <ul>
+          <li>Mover plata real / ser procesador licenciado</li>
+          <li>Wallet custodial propia (guardar claves privadas de terceros)</li>
+          <li>Frontend/UI de usuario final (es un proyecto de backend puro)</li>
+          <li>Modelo de ML de fraude (queda como proyecto separado, no se mezcla acá)</li>
+          <li>Bot de trading (proyecto totalmente distinto, descartado para este portfolio)</li>
+          <li>Convertirse en broker o manejar activos financieros de terceros</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Stack: qué de todo lo que hablamos se usa y qué no</h2>
+    <p class="lead">Tabla honesta — si algo no se usa, dice por qué. La idea no es meter todo el checklist a la fuerza, sino justificar cada pieza.</p>
+
+    <div class="category-title">Java / Spring</div>
+    <table>
+      <tr><th>Tecnología</th><th>Estado</th><th>Motivo</th></tr>
+      <tr><td>Java (POO, excepciones, interfaces)</td><td><span class="status yes">Usado</span></td><td class="reason">Base del proyecto</td></tr>
+      <tr><td>Collections / Streams / lambdas</td><td><span class="status yes">Usado</span></td><td class="reason">Transformación de datos de transacciones, filtros de ruteo</td></tr>
+      <tr><td>Concurrencia básica</td><td><span class="status yes">Usado</span></td><td class="reason">Consumo concurrente de la cola de eventos</td></tr>
+      <tr><td>Algoritmia / Complejidad O(n)</td><td><span class="status no">No usado</span></td><td class="reason">No es un proyecto de algoritmos — el valor está en la arquitectura, no en estructuras de datos custom</td></tr>
+      <tr><td>Spring Boot</td><td><span class="status yes">Usado</span></td><td class="reason">Framework principal de los 4 servicios</td></tr>
+      <tr><td>Controllers/Services/Repositories</td><td><span class="status yes">Usado</span></td><td class="reason">Diseño por capas estándar</td></tr>
+      <tr><td>Inyección de dependencias</td><td><span class="status yes">Usado</span></td><td class="reason">Nativo de Spring</td></tr>
+      <tr><td>JPA / Hibernate</td><td><span class="status yes">Usado</span></td><td class="reason">Persistencia del ledger en payment-core</td></tr>
+    </table>
+
+    <div class="category-title">APIs / Datos</div>
+    <table>
+      <tr><th>Tecnología</th><th>Estado</th><th>Motivo</th></tr>
+      <tr><td>APIs REST / HTTP / JSON</td><td><span class="status yes">Usado</span></td><td class="reason">Contrato de todos los servicios</td></tr>
+      <tr><td>SQL (relacional)</td><td><span class="status yes">Usado</span></td><td class="reason">Postgres para el ledger — necesita consistencia ACID</td></tr>
+      <tr><td>NoSQL / DynamoDB</td><td><span class="status yes">Usado</span></td><td class="reason">DynamoDB local (vía LocalStack) para log de eventos de webhook e idempotency keys — datos de alta escritura, baja necesidad de joins</td></tr>
+      <tr><td>Caching</td><td><span class="status yes">Usado</span></td><td class="reason">Redis para chequeo rápido de idempotency keys repetidas</td></tr>
+      <tr><td>Postman</td><td><span class="status yes">Usado</span></td><td class="reason">Colección documentada para pruebas manuales de la API</td></tr>
+    </table>
+
+    <div class="category-title">Diseño / Calidad</div>
+    <table>
+      <tr><th>Tecnología</th><th>Estado</th><th>Motivo</th></tr>
+      <tr><td>SOLID / Clean Code / Diseño por capas</td><td><span class="status yes">Usado</span></td><td class="reason">Prácticas transversales a todo el código</td></tr>
+      <tr><td>Manejo de errores / Logging</td><td><span class="status yes">Usado</span></td><td class="reason">Crítico en pagos — todo error se loguea con contexto de transacción</td></tr>
+      <tr><td>Testing unitario + integración</td><td><span class="status yes">Usado</span></td><td class="reason">Testcontainers para probar contra Postgres/DynamoDB reales</td></tr>
+      <tr><td>"No hay QA dedicado"</td><td><span class="status yes">Aplica</span></td><td class="reason">El dev (vos) escribe y mantiene sus propios tests, como en fintechs reales de este tamaño</td></tr>
+    </table>
+
+    <div class="category-title">Sistemas distribuidos</div>
+    <table>
+      <tr><th>Tecnología</th><th>Estado</th><th>Motivo</th></tr>
+      <tr><td>Microservicios</td><td><span class="status yes">Usado</span></td><td class="reason">4 servicios con límites justificados (ver arquitectura)</td></tr>
+      <tr><td>Mensajería / async</td><td><span class="status yes">Usado</span></td><td class="reason">Cola entre webhook-listener y payment-core</td></tr>
+    </table>
+
+    <div class="category-title">Git / CI-CD / Despliegue</div>
+    <table>
+      <tr><th>Tecnología</th><th>Estado</th><th>Motivo</th></tr>
+      <tr><td>Git / Rebase / Gitflow</td><td><span class="status yes">Usado</span></td><td class="reason">Flujo de ramas develop/feature/release</td></tr>
+      <tr><td>GitHub Actions</td><td><span class="status yes">Usado</span></td><td class="reason">CI/CD gratuito, sin infraestructura propia que mantener</td></tr>
+      <tr><td>Jenkins</td><td><span class="status no">No usado</span></td><td class="reason">Requeriría hostear/mantener un servidor Jenkins propio solo para un proyecto personal — no se justifica el costo operativo. Se documenta como alternativa conocida.</td></tr>
+      <tr><td>Staging / Rollback / Hotfix</td><td><span class="status yes">Usado</span></td><td class="reason">Ambiente de staging real + tags de versión para simular rollback y hotfix</td></tr>
+      <tr><td>Docker</td><td><span class="status yes">Usado</span></td><td class="reason">docker-compose levanta los 4 servicios + Postgres + Redis + DynamoDB local</td></tr>
+      <tr><td>IntelliJ IDEA</td><td><span class="status yes">Usado</span></td><td class="reason">IDE principal de desarrollo</td></tr>
+      <tr><td>Visual Studio Code + Claude Code</td><td><span class="status partial">Parcial</span></td><td class="reason">Se usa como copiloto de desarrollo (proceso), no es parte del producto entregado</td></tr>
+    </table>
+
+    <div class="category-title">Observabilidad</div>
+    <table>
+      <tr><th>Tecnología</th><th>Estado</th><th>Motivo</th></tr>
+      <tr><td>Grafana + métricas (error rate)</td><td><span class="status yes">Usado</span></td><td class="reason">Self-hosteado vía Docker, gratis, sin límite de tiempo de prueba</td></tr>
+      <tr><td>Datadog</td><td><span class="status no">No usado</span></td><td class="reason">Plan pago a mediano plazo — se documenta el conocimiento conceptual pero no se integra en el proyecto para no depender de una cuenta de prueba que expira</td></tr>
+      <tr><td>New Relic</td><td><span class="status no">No usado</span></td><td class="reason">Misma razón que Datadog — se prioriza Grafana por ser sostenible gratis a largo plazo</td></tr>
+      <tr><td>Looker / BigQuery</td><td><span class="status no">No usado</span></td><td class="reason">Son herramientas de analítica de negocio, no de un backend de pagos — fuera del problema que este proyecto resuelve</td></tr>
+    </table>
+
+    <div class="category-title">Gestión / Colaboración</div>
+    <table>
+      <tr><th>Tecnología</th><th>Estado</th><th>Motivo</th></tr>
+      <tr><td>Jira</td><td><span class="status yes">Usado</span></td><td class="reason">Tablero de tareas del proyecto, aunque sea trabajo individual</td></tr>
+      <tr><td>Slack</td><td><span class="status yes">Usado</span></td><td class="reason">Webhook que avisa cuando termina el pipeline de CI/CD</td></tr>
+      <tr><td>Figma</td><td><span class="status no">No usado</span></td><td class="reason">No hay interfaz de usuario que diseñar — es un proyecto 100% backend/API</td></tr>
+    </table>
+
+    <div class="category-title">IA / Agentes (el diferencial del proyecto)</div>
+    <table>
+      <tr><th>Tecnología</th><th>Estado</th><th>Motivo</th></tr>
+      <tr><td>MCP (Model Context Protocol)</td><td><span class="status yes">Usado</span></td><td class="reason">Servicio <code>mcp-agent-gateway</code> expone "crear pago"/"consultar estado" — en línea con los protocolos de pagos agénticos que está adoptando la industria</td></tr>
+      <tr><td>Agents</td><td><span class="status yes">Usado</span></td><td class="reason">Un agente de IA puede iniciar un pago end-to-end a través del servidor MCP</td></tr>
+      <tr><td>Claude Code</td><td><span class="status partial">Parcial</span></td><td class="reason">Usado como herramienta de desarrollo, no es parte del sistema final</td></tr>
+      <tr><td>Skills / Guidelines</td><td><span class="status no">No usado como producto</span></td><td class="reason">Son configuración del proceso de desarrollo (CLAUDE.md), no una feature que el sistema entregue</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Roadmap de fases</h2>
+    <p class="lead">Decisión: arrancamos con los servicios ya separados desde el día 1 (no monolito-primero). No es lo más "prolijo" desde el punto de vista de ingeniería pura, pero el objetivo explícito acá es practicar microservicios de verdad — que es justo lo que piden en la mayoría de las vacantes backend senior de fintech — así que se prioriza el aprendizaje por sobre la ruta más conservadora.</p>
+    <div class="phase">
+      <div class="phase-num">1</div>
+      <div class="phase-content"><strong>Esqueleto de los 4 servicios + docker-compose</strong><span>payment-core, webhook-listener, reconciliation-worker y mcp-agent-gateway como proyectos Spring Boot separados desde el inicio, cada uno con su propio repo/módulo, comunicándose por la cola desde el primer commit.</span></div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">2</div>
+      <div class="phase-content"><strong>payment-core: ledger + máquina de estados + idempotencia</strong><span>Postgres, JPA, idempotency keys con TTL en Redis. Acá se sienta la base de consistencia del sistema.</span></div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">3</div>
+      <div class="phase-content"><strong>Integrar sandbox de Stripe + Mercado Pago</strong><span>Conexión real a ambos, normalización de respuestas, ruteo simple por reglas, primeras pruebas de comunicación entre servicios reales (no mocks).</span></div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">4</div>
+      <div class="phase-content"><strong>webhook-listener en serio</strong><span>Verificación de firma, publicación a la cola, manejo de reintentos/duplicados que llegan desde afuera.</span></div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">5</div>
+      <div class="phase-content"><strong>Checkout USDT no-custodial</strong><span>Verificación de pago en blockchain pública, sin tocar fondos.</span></div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">6</div>
+      <div class="phase-content"><strong>reconciliation-worker + pagos recurrentes</strong><span>Job programado de conciliación + motor de cobros recurrentes (inspirado en Pix Automático).</span></div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">7</div>
+      <div class="phase-content"><strong>mcp-agent-gateway</strong><span>El diferenciador: un agente de IA puede crear/consultar pagos a través de MCP.</span></div>
+    </div>
+    <div class="phase">
+      <div class="phase-num">8</div>
+      <div class="phase-content"><strong>CI/CD, observabilidad, documentación pública</strong><span>GitHub Actions, Grafana, README con diagramas, repo público listo para mostrar.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Conceptos de pagos que vamos a tocar</h2>
+    <p class="lead">No es solo "usar tecnologías" — estos son los conceptos de dominio que hacen que el proyecto realmente demuestre entendimiento de pagos, no solo un CRUD con pasos extra.</p>
+    <div class="card">
+      <ul>
+        <li><strong>Idempotencia</strong> — no cobrar dos veces ante reintentos de red</li>
+        <li><strong>Máquina de estados de una transacción</strong> — pending → approved/rejected → settled/refunded</li>
+        <li><strong>Webhooks firmados</strong> — verificar que la notificación viene realmente del proveedor, no de un atacante</li>
+        <li><strong>Reconciliación</strong> — comparar el ledger propio contra lo que dice cada proveedor</li>
+        <li><strong>Ledger de doble entrada</strong> — concepto contable aplicado al registro de cada movimiento</li>
+        <li><strong>Reintentos con backoff</strong> — ante timeouts o fallas de red del proveedor</li>
+        <li><strong>TTL de idempotency keys</strong> — por cuánto tiempo una key sigue siendo válida</li>
+        <li><strong>Tokenización</strong> — por qué nunca se guarda el número de tarjeta real</li>
+        <li><strong>Settlement vs. autorización</strong> — aprobar un pago no es lo mismo que el momento en que la plata se mueve de verdad</li>
+        <li><strong>Multi-moneda / FX</strong> — conversión entre monedas al momento de la transacción</li>
+        <li><strong>Dunning</strong> — reintento inteligente de cobros recurrentes fallidos</li>
+        <li><strong>Rate limiting</strong> — proteger el endpoint de pago de abuso/ataques</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    Documento vivo — se actualiza a medida que avanza el proyecto.
+  </footer>
+
+</main>
+</body>
+</html>
