@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagramas — Payment Orchestrator</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #fdfbf4;
+    color: #343a40;
+    padding: 40px 20px 100px;
+  }
+  header { max-width: 900px; margin: 0 auto 30px; text-align: center; }
+  header h1 { font-size: 1.8rem; margin: 0 0 8px; }
+  header p { color: #6b7280; margin: 0; }
+
+  section { max-width: 900px; margin: 0 auto 60px; }
+  section h2 { font-size: 1.1rem; color: #495057; margin-bottom: 12px; }
+  section p.desc { color: #6b7280; font-size: 0.9rem; margin-bottom: 16px; }
+  img {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  .back {
+    display: block;
+    max-width: 900px;
+    margin: 30px auto 0;
+    text-align: center;
+  }
+  .back a { color: #1971c2; text-decoration: none; font-size: 0.95rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🖼️ Diagramas — Payment Orchestrator</h1>
+  <p>Dos vistas: dónde estamos parados hoy, y a dónde vamos.</p>
+</header>
+
+<section>
+  <h2>Estado actual</h2>
+  <p class="desc">Lo que existe de verdad hoy — solo payment-core (vacío) y Postgres corriendo, todavía sin conectar entre sí.</p>
+  <img src="diagrama-estado-actual.png" alt="Diagrama del estado actual del proyecto">
+</section>
+
+<section>
+  <h2>Arquitectura final</h2>
+  <p class="desc">Hacia dónde vamos — los 4 servicios, la cola, la base, el cache, y cómo un agente de IA puede crear pagos.</p>
+  <img src="diagrama-arquitectura-final.png" alt="Diagrama de la arquitectura final del proyecto">
+</section>
+
+<div class="back">
+  <a href="roadmap.html">← volver al roadmap</a>
+</div>
+
+</body>
+</html>
