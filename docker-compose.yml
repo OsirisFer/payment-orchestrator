@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: payment-orchestrator-postgres
+    environment:
+      POSTGRES_DB: payment_core
+      POSTGRES_USER: payment_core
+      POSTGRES_PASSWORD: payment_core_local
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

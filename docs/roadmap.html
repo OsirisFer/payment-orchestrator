@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap — Payment Orchestrator</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #171a24;
+    --border: #2a2e3d;
+    --text: #e4e6eb;
+    --muted: #9aa0ae;
+    --accent: #5b8cff;
+    --green: #2ecc71;
+    --yellow: #f5c15a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 48px 24px 100px;
+  }
+  header {
+    max-width: 680px;
+    margin: 0 auto 56px;
+    text-align: center;
+  }
+  header h1 {
+    font-size: 1.8rem;
+    margin: 0 0 8px;
+  }
+  header p {
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .path {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 34px;
+  }
+  .path::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 10px;
+    bottom: 10px;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--green) 0%, var(--green) var(--progress, 30%), var(--border) var(--progress, 30%), var(--border) 100%);
+    border-radius: 3px;
+  }
+
+  .step {
+    position: relative;
+    margin-bottom: 26px;
+  }
+  .node {
+    position: absolute;
+    left: -34px;
+    top: 2px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 3px solid var(--border);
+    background: var(--bg);
+    color: var(--muted);
+    z-index: 2;
+  }
+  .step.done .node {
+    background: var(--green);
+    border-color: var(--green);
+    color: #0b0d13;
+  }
+  .step.current .node {
+    background: var(--bg);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 0 5px rgba(91,140,255,0.18);
+  }
+
+  .phase-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 3px;
+    display: block;
+  }
+  .step.todo .phase-label { color: var(--muted); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .step.done .card { opacity: 0.85; }
+  .step.current .card {
+    border-color: var(--accent);
+  }
+  .title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+  }
+  .note {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+  .badge {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 0.68rem;
+    padding: 1px 8px;
+    border-radius: 10px;
+    vertical-align: middle;
+    font-weight: 600;
+    background: rgba(91,140,255,0.18);
+    color: var(--accent);
+  }
+
+  .concepts {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  .concepts-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--yellow);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .concepts.preview .concepts-label { color: var(--muted); }
+  .concept {
+    font-size: 0.82rem;
+    margin-bottom: 5px;
+    line-height: 1.45;
+  }
+  .concept b { color: var(--text); }
+  .concepts.preview .concept { color: var(--muted); }
+
+  .phase-divider {
+    max-width: 680px;
+    margin: 40px auto 14px 0;
+    padding-left: 34px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🛤️ Roadmap — Payment Orchestrator</h1>
+  <p>El camino del proyecto, paso a paso, con los conceptos que fuimos viendo en cada uno. Se actualiza a mano — es la "foto" de dónde estamos y un repaso de lo aprendido.</p>
+</header>
+
+<div class="phase-divider">Setup inicial</div>
+<div class="path" style="--progress: 26%;">
+
+  <div class="step done">
+    <div class="node">✓</div>
+    <span class="phase-label">Setup</span>
+    <div class="card">
+      <div class="title">Repo creado en GitHub</div>
+      <div class="note">Arrancamos por acá porque necesitábamos un lugar donde todo lo que viene se vaya guardando y, de paso, quede público para mostrarlo después.</div>
+      <div class="concepts">
+        <span class="concepts-label">Conceptos vistos</span>
+        <div class="concept"><b>Repo público vs privado:</b> público significa visible para cualquiera desde ya (útil para portfolio), privado lo podés pasar a público después.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step done">
+    <div class="node">✓</div>
+    <span class="phase-label">Setup</span>
+    <div class="card">
+      <div class="title">Doc de arquitectura/alcance subido</div>
+      <div class="note">Antes de escribir una línea de código, dejamos por escrito qué íbamos a construir, con qué, y qué no — para tener un mapa al que volver cuando nos perdamos a mitad de camino.</div>
+    </div>
+  </div>
+
+  <div class="step done">
+    <div class="node">✓</div>
+    <span class="phase-label">Setup</span>
+    <div class="card">
+      <div class="title">Repo clonado y abierto en IntelliJ</div>
+      <div class="note">Con el plan ya escrito, trajimos ese repo a tu máquina (~/IdeaProjects/payment-orchestrator) para poder empezar a escribir código de verdad.</div>
+      <div class="concepts">
+        <span class="concepts-label">Conceptos vistos</span>
+        <div class="concept"><b>Working directory (cwd):</b> una sesión de Claude Code queda "parada" en la carpeta desde donde arrancó — abrir IntelliJ no la mueve sola a la carpeta del proyecto.</div>
+        <div class="concept"><b><code>claude -c</code> vs <code>claude -r</code>:</b> <code>-c</code> continúa la última sesión de esa carpeta puntual; <code>-r</code> te deja elegir cualquier sesión pasada de una lista.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step done">
+    <div class="node">✓</div>
+    <span class="phase-label">Fase 1</span>
+    <div class="card">
+      <div class="title">payment-core — scaffold generado</div>
+      <div class="note">Generamos el primer servicio: va a ser el corazón del sistema, el que registra cada pago y decide si se aprueba o se rechaza. Para eso le dimos la capacidad de hablar por HTTP (<code>web</code>) y de guardar datos en una base relacional (<code>data-jpa</code> + <code>postgresql</code>) — lo que nos lleva directo al siguiente paso: necesita una base de datos donde guardar algo.</div>
+      <div class="concepts">
+        <span class="concepts-label">Conceptos vistos</span>
+        <div class="concept"><b>Maven / <code>pom.xml</code>:</b> administra las dependencias (librerías externas) y cómo se compila el proyecto — equivalente a <code>package.json</code> en Node.</div>
+        <div class="concept"><b><code>mvnw</code> (Maven Wrapper):</b> script que corre Maven con la versión correcta sin instalarlo aparte en tu máquina.</div>
+        <div class="concept"><b><code>@SpringBootApplication</code>:</b> anotación "maestra" que le dice a Spring dónde arrancar y qué paquete escanear para armar la app automáticamente.</div>
+        <div class="concept"><b><code>SpringApplication.run(...)</code>:</b> la línea que efectivamente prende el servidor web embebido y deja la app escuchando pedidos HTTP.</div>
+        <div class="concept"><b>Dependencia <code>web</code>:</b> habilita exponer endpoints REST.</div>
+        <div class="concept"><b>Dependencia <code>data-jpa</code>:</b> da JPA/Hibernate, para guardar objetos Java en una base relacional sin escribir SQL a mano.</div>
+        <div class="concept"><b>Dependencia <code>postgresql</code>:</b> el driver/traductor para que Java hable con Postgres específicamente.</div>
+        <div class="concept"><b>Dependencia <code>validation</code>:</b> valida datos de entrada de forma declarativa (ej: monto no negativo).</div>
+        <div class="concept"><b>Dependencia <code>devtools</code>:</b> reinicia la app sola cada vez que guardás un cambio.</div>
+        <div class="concept"><b><code>application.properties</code>:</b> archivo de configuración (puerto, conexión a base de datos, etc.), todavía vacío.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step done">
+    <div class="node">✓</div>
+    <span class="phase-label">Fase 1</span>
+    <div class="card">
+      <div class="title">docker-compose.yml creado</div>
+      <div class="note">payment-core iba a necesitar esa base de datos, pero en vez de instalar Postgres directo en tu máquina, armamos la receta para levantarlo aislado en un contenedor — lista para usar, pero todavía apagada.</div>
+      <div class="concepts">
+        <span class="concepts-label">Conceptos vistos</span>
+        <div class="concept"><b>Docker / contenedor:</b> empaqueta un programa (Postgres) con todo lo que necesita para correr, aislado del resto de tu máquina.</div>
+        <div class="concept"><b><code>docker-compose</code>:</b> levanta varios contenedores juntos con un solo archivo y un solo comando.</div>
+        <div class="concept"><b><code>image: postgres:16</code>:</b> la "plantilla" oficial que Docker descarga y usa para crear el contenedor.</div>
+        <div class="concept"><b><code>environment</code>:</b> variables que Postgres lee al arrancar por primera vez para crear base, usuario y contraseña solo.</div>
+        <div class="concept"><b><code>ports "5432:5432"</code>:</b> conecta el puerto de adentro del contenedor con el puerto de tu máquina, para que <code>payment-core</code> (que corre afuera del contenedor) se pueda conectar.</div>
+        <div class="concept"><b><code>volumes</code>:</b> guarda los datos fuera del contenedor, para no perderlos si lo recreás.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step done">
+    <div class="node">✓</div>
+    <span class="phase-label">Fase 1</span>
+    <div class="card">
+      <div class="title">Docker Desktop levantado y Postgres corriendo</div>
+      <div class="note">Prendimos esa base de datos de verdad. Ahora hay un Postgres real escuchando en el puerto 5432, esperando a que payment-core se conecte — eso todavía falta configurarlo, pero ya está la pieza lista.</div>
+      <div class="concepts">
+        <span class="concepts-label">Conceptos vistos</span>
+        <div class="concept"><b>Docker Desktop vs CLI <code>docker</code>:</b> Docker Desktop es la app con interfaz gráfica que levanta el motor (daemon) que el comando <code>docker</code> necesita para funcionar.</div>
+        <div class="concept"><b>PATH del sistema:</b> para que el comando <code>docker</code> funcione en cualquier terminal, su ubicación tiene que estar en la variable <code>PATH</code> — lo agregamos a <code>~/.zshrc</code>.</div>
+        <div class="concept"><b><code>docker compose up -d</code>:</b> descarga la imagen si falta y levanta los contenedores en segundo plano (<code>-d</code> = detached).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step current">
+    <div class="node">●</div>
+    <span class="phase-label">Fase 1</span>
+    <div class="card">
+      <div class="title">webhook-listener — scaffold<span class="badge">ACÁ ESTAMOS</span></div>
+      <div class="note">Antes de darle lógica real a payment-core, vamos a crear su compañero: el servicio que va a recibir los avisos de Stripe/Mercado Pago ("este pago ya se aprobó") y se los va a pasar a payment-core por una cola — sin que payment-core tenga que estar consultando todo el tiempo.</div>
+      <div class="concepts preview">
+        <span class="concepts-label">Vamos a ver</span>
+        <div class="concept">Por qué este servicio necesita ser liviano/rápido y no depender del core.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step todo">
+    <div class="node">5</div>
+    <span class="phase-label">Fase 1</span>
+    <div class="card">
+      <div class="title">reconciliation-worker — scaffold</div>
+      <div class="note">Una vez que payment-core y webhook-listener se estén hablando, va a hacer falta alguien que de tanto en tanto revise que las cuentas cierren — este servicio va a comparar lo que payment-core anotó contra lo que dicen de verdad los proveedores.</div>
+      <div class="concepts preview">
+        <span class="concepts-label">Vamos a ver</span>
+        <div class="concept">Scheduled jobs en Spring (<code>@Scheduled</code>) — tareas que corren solas cada cierto tiempo.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step todo">
+    <div class="node">6</div>
+    <span class="phase-label">Fase 1</span>
+    <div class="card">
+      <div class="title">mcp-agent-gateway — scaffold</div>
+      <div class="note">El cuarto y último servicio del esqueleto: una puerta de entrada especial para que un agente de IA pueda pedir un pago en nuestro nombre, en vez de un humano llamando a la API REST.</div>
+      <div class="concepts preview">
+        <span class="concepts-label">Vamos a ver</span>
+        <div class="concept">Qué es un servidor MCP y cómo un agente de IA lo usa para "llamar" a una función tuya.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step todo">
+    <div class="node">7</div>
+    <span class="phase-label">Fase 2</span>
+    <div class="card">
+      <div class="title">Entidad Payment + máquina de estados</div>
+      <div class="note">Con los 4 servicios ya armados, volvemos a payment-core para darle su primera funcionalidad real: una clase Payment que Hibernate va a convertir sola en una fila de la tabla de ese Postgres que ya tenemos corriendo, controlada por una máquina de estados.</div>
+      <div class="concepts preview">
+        <span class="concepts-label">Vamos a ver</span>
+        <div class="concept"><code>@Entity</code>, <code>@Id</code>, <code>@Enumerated</code> — cómo una clase Java se convierte en una tabla de base de datos.</div>
+        <div class="concept">Qué es una máquina de estados y por qué importa tanto en pagos (PENDING → APPROVED/REJECTED).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step todo">
+    <div class="node">8</div>
+    <span class="phase-label">Fase 2</span>
+    <div class="card">
+      <div class="title">Idempotencia con Redis</div>
+      <div class="note">Una vez que Payment ya pueda guardarse, hay que blindarlo: si una misma solicitud llega dos veces (por un reintento de red), Redis va a guardar una "marca" para que la segunda vez no se cobre de nuevo.</div>
+      <div class="concepts preview">
+        <span class="concepts-label">Vamos a ver</span>
+        <div class="concept">Qué es Redis (cache en memoria) y cómo usamos un TTL (tiempo de vida) para una idempotency key.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step todo">
+    <div class="node">9</div>
+    <span class="phase-label">Fase 3</span>
+    <div class="card">
+      <div class="title">Integración sandbox Stripe + Mercado Pago</div>
+      <div class="note">Con el core ya sólido y protegido, lo conectamos por primera vez con el mundo real: cuentas de prueba de Stripe y Mercado Pago, para ver un pago de verdad (con plata falsa) recorriendo todo el camino que armamos.</div>
+      <div class="concepts preview">
+        <span class="concepts-label">Vamos a ver</span>
+        <div class="concept">Qué es un ambiente sandbox/test de un proveedor de pagos, y cómo normalizar respuestas distintas a un formato propio.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step todo">
+    <div class="node">…</div>
+    <span class="phase-label">Fases 4-8</span>
+    <div class="card">
+      <div class="title">Webhook real, checkout USDT, reconciliación, pagos recurrentes, MCP, CI/CD</div>
+      <div class="note">De ahí en más seguimos sumando capas sobre esa base: que webhook-listener reciba avisos reales y firmados, que se pueda cobrar en USDT sin tocar la plata nosotros, que reconciliation-worker haga su trabajo solo, pagos que se repiten cada mes, un agente de IA usando mcp-agent-gateway, y todo desplegándose automático. Detalle completo en docs/proyecto-orquestador-pagos.html.</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
